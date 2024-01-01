@@ -1,15 +1,10 @@
 
 import './App.css';
+import HomePage from './pages/HomePage';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          start react app.
-        </p>
-      </header>
-    </div>
+    <HomePage />
   );
 }
 
