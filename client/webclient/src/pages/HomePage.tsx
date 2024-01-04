@@ -1,10 +1,12 @@
+import { Grid } from "@mui/material";
 import Property from "../components/Property";
 import { PropertyType } from "../models/Property";
 import { TApiResponse, useApiGet } from "../utils/fetchApi";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const HomePage = () => {
     const data: TApiResponse = useApiGet(
-        `/properties/list?locationExternalIDs=5002&purpose=for-sale&hitsPerPage=6`
+        `/properties/list?locationExternalIDs=5002&purpose=for-sale&hitsPerPage=20`
     );
 
     // print the output
@@ -15,13 +17,15 @@ const HomePage = () => {
     return (
         <div>
             {data.loading ? (
-                <p>loading!!!!!</p>
+            <LoadingSpinner />  
             ) : (
-                <p>finish</p>
+                <Grid container spacing={{ xs: 2, md: 3, sm: 2 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                {data?.data?.hits.map((item: PropertyType, i: number) =>
+                    <Property property={item} key={i} />
+                )}
+                </Grid>
             )}
-            {data?.data?.hits.map((item: PropertyType, i: number) =>
-                <Property property={item} key={i} />
-            )}
+
         </div>
     )
     // return (
