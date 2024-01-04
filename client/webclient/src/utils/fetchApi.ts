@@ -1,28 +1,46 @@
-import axios from 'axios';
-import { Property as PropertyType } from '../models/Property';
+import { useEffect, useState } from "react";
 
 export const baseUrl = 'https://bayut.p.rapidapi.com';
 
-export const fetchApi = async (url: string) => {
-    const options = {
-        method: 'GET',
-        url: `${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-sale&hitsPerPage=6`,
-        params: {
-            query: 'abu dhabi',
-            hitsPerPage: '25',
-            page: '0',
-            lang: 'en'
-        },
-        headers: {
-            'X-RapidAPI-Key': '4570107fdamsh7793587a36b75b5p189dcajsnf2ab4e91dde5',
-            'X-RapidAPI-Host': 'bayut.p.rapidapi.com'
-        }
-    };
-    try {
-        const response = await axios.request(options);
-        return response;
-    } catch (error) {
-        console.error(error);
-    }
+export type TApiResponse = {
+    status: Number;
+    statusText: String;
+    data: any;
+    error: any;
+    loading: Boolean;
+};
 
-}
+export const useApiGet = (url: string): TApiResponse => {
+    const [status, setStatus] = useState<Number>(0);
+    const [statusText, setStatusText] = useState<String>('');
+    const [data, setData] = useState<any>();
+    const [error, setError] = useState<any>();
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const getAPIData = async () => {
+        setLoading(true);
+        try {
+            const apiResponse = await fetch(`${baseUrl}${url}`, {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': '4570107fdamsh7793587a36b75b5p189dcajsnf2ab4e91dde5',
+                    'X-RapidAPI-Host': 'bayut.p.rapidapi.com'
+                }
+            });
+            const json = await apiResponse.json();
+            setStatus(apiResponse.status);
+            setStatusText(apiResponse.statusText);
+            setData(json);
+        } catch (error) {
+            setError(error);
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        getAPIData();
+    }, []);
+
+    return { status, statusText, data, error, loading };
+};
+
