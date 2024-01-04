@@ -1,5 +1,5 @@
 import { Box, Flex, Image, Text, Avatar, Link } from '@chakra-ui/react';
-import { Property as PropertyType } from '../models/Property';
+import { PropertyType } from '../models/Property';
 
 interface Props {
     property: PropertyType;
@@ -7,8 +7,13 @@ interface Props {
 
 const Property = (props: Props) => {
     return (
-    <p>price: ${props.property.price.toString()}</p>
-    
+        <div>
+            <p>id: {props.property.objectID}</p>
+            <p>price: {props.property.price.toString()}</p>
+            <p>contact name: {props.property.contactName}</p>
+            <p>rooms: {props.property.rooms.toString()}</p>
+            <p>------------------------</p>
+        </div>
     );
 
 }
